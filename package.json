@@ -1,0 +1,12 @@
+{
+  "name": "vcreatek-rr-actual",
+  "version": "1.0.0",
+  "private": true,
+  "description": "VCreaTek Rewards & Recognition (R&R) Platform",
+  "scripts": {
+    "dev": "npm --prefix client run dev",
+    "build": "npm --prefix client run build",
+    "preview": "npm --prefix client run preview",
+    "start": "npm --prefix client run dev"
+  }
+}

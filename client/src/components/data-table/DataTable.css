@@ -1,0 +1,47 @@
+/* ========================================
+   DataTable Component Styles
+   ======================================== */
+.tbl {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--r12, 12px);
+  border: 1px solid var(--border, #e2e8f0);
+  background: var(--surface, #ffffff);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th {
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--t3, #64748b);
+  font-weight: 700;
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--border, #e2e8f0);
+  background: #f8fafc;
+}
+
+td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border, #e2e8f0);
+  vertical-align: middle;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background: #fcfcfe;
+}
+
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

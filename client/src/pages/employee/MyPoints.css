@@ -1,0 +1,8 @@
+/* ========================================
+   MyPoints Page Styles
+   ======================================== */
+.my-points-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

@@ -1,0 +1,8 @@
+/* ========================================
+   RedeemPoints Page Styles
+   ======================================== */
+.redeem-points-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}

@@ -1,0 +1,22 @@
+/* ========================================
+   MyRewards Page Styles
+   ======================================== */
+.my-rewards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.rewards-hero-card {
+  background: linear-gradient(135deg, var(--primary, #2e3192), var(--primary-light, #4144b0));
+  color: #ffffff;
+  border-radius: var(--r20, 20px);
+  padding: 28px 32px;
+}
+
+.tier-badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}

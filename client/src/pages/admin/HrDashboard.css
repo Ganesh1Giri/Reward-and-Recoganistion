@@ -1,0 +1,8 @@
+/* ========================================
+   HrDashboard Page Styles
+   ======================================== */
+.hr-dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}

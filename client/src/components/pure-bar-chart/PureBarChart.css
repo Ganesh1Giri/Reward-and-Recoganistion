@@ -1,0 +1,16 @@
+/* ========================================
+   PureBarChart Component Styles
+   ======================================== */
+.chart-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.chart-bar-group rect {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.chart-bar-group:hover rect {
+  opacity: 1 !important;
+  filter: brightness(1.1);
+}

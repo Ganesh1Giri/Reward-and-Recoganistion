@@ -1,0 +1,8 @@
+/* ========================================
+   RedemptionHistory Page Styles
+   ======================================== */
+.redemption-history-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

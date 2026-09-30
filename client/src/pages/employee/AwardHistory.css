@@ -1,0 +1,8 @@
+/* ========================================
+   AwardHistory Page Styles
+   ======================================== */
+.award-history-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

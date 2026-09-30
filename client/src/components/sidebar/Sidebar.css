@@ -1,0 +1,94 @@
+/* ========================================
+   Sidebar Component Styles
+   ======================================== */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid var(--border, #e2e8f0);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0 16px;
+  border-bottom: 1px solid var(--border, #e2e8f0);
+}
+
+.brand-logo {
+  height: 40px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  display: block;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-weight: 800;
+  color: var(--primary, #2e3192);
+  font-size: 1.05rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.nav-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--t3, #64748b);
+  padding: 0 12px;
+  margin-top: 14px;
+  margin-bottom: 6px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: var(--r12, 12px);
+  color: var(--t2, #334155);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.93rem;
+  margin-bottom: 3px;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background: var(--focus, #f5f6ff);
+  color: var(--primary, #2e3192);
+}
+
+.nav-link.active {
+  background: linear-gradient(135deg, var(--primary, #2e3192), var(--primary-light, #4144b0));
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(46, 49, 146, 0.22);
+}
+
+.nav-link.active svg {
+  color: #ffffff;
+}
+
+.sidebar-user {
+  border-top: 1px solid var(--border, #e2e8f0);
+  padding-top: 14px;
+  margin-top: auto;
+}

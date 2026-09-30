@@ -1,0 +1,58 @@
+/* ========================================
+   KpiCard Component Styles
+   ======================================== */
+.kpi {
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: var(--r20, 20px);
+  padding: 22px;
+  box-shadow: var(--shadow, 0 4px 16px rgba(15, 23, 42, 0.06));
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.kpi:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+}
+
+.kpi.primary {
+  border-top: 4px solid var(--primary, #2e3192);
+}
+
+.kpi.accent {
+  border-top: 4px solid var(--accent, #e46a25);
+}
+
+.kpi.success {
+  border-top: 4px solid var(--success, #10b981);
+}
+
+.kpi.warn {
+  border-top: 4px solid var(--warning, #f59e0b);
+}
+
+.kpi.danger {
+  border-top: 4px solid var(--danger, #ef4444);
+}
+
+.kpi .v {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary, #2e3192);
+  line-height: 1.1;
+}
+
+.kpi .l {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--t3, #64748b);
+  margin-top: 6px;
+}
+
+.kpi .s {
+  font-size: 0.8rem;
+  color: var(--t3, #64748b);
+  margin-top: 4px;
+}
