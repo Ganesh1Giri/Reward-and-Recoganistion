@@ -195,7 +195,7 @@ export const Login: React.FC = () => {
 
           {/* Demo Accounts Collapsible */}
           <details className="demo-box">
-            <summary>&#9654; Demo accounts (password for all: Welcome@123)</summary>
+            <summary>&#9654; User accounts (password for all: Welcome@123)</summary>
             {groups.map(([grpName, accounts]) => (
               <React.Fragment key={grpName}>
                 <div className="grp">{grpName}</div>

@@ -1,0 +1,307 @@
+The VCreaTek Rewards & Recognition (R&R) Platform frontend is a high-performance Single Page Application (SPA) designed with a clean corporate design system. It handles role-based workflows for employees, managers, and HR administrators, complete with instant eligibility checks, points ledger management, printable certificate generation, and bidirectional Excel data portability.
+
+1. Technology Stack & Build Pipeline
+Framework & Core: Built with 
+
+React 19
+ and 
+
+TypeScript 5.7
+ for end-to-end type safety.
+Build Tool: 
+
+Vite 6
+ providing instant Hot Module Replacement (HMR) and optimized ES module bundling.
+Routing: 
+
+React Router DOM v7
+ using HashRouter for zero-configuration deployment across static and web server environments.
+Iconography & Typography: Clean SVG iconography from 
+
+lucide-react
+ paired with modern geometric typography from 
+
+@fontsource/outfit
+.
+Excel Data Engine: 
+
+xlsx (SheetJS)
+ for native browser-side reading and generation of multi-sheet .xlsx corporate workbooks without backend roundtrips.
+2. Application Architecture & Routing Structure
+The application entry point is configured in 
+
+App.tsx
+, wrapping the tree inside 
+
+AuthProvider
+, 
+
+DataProvider
+, and 
+
+AppRoutes
+.
+
+                      HashRouter
+                          │
+                     AuthProvider
+                          │
+                     DataProvider
+                          │
+                      AppRoutes
+                     /        \
+       (Public) /login        ProtectedLayout (Shell)
+                              ├─ Sidebar
+                              ├─ Topbar
+                              └─ RoleGate (Outlet)
+                                  ├─ /me/*       (Employee)
+                                  ├─ /leader/*   (Leader & HR)
+                                  ├─ /approvals  (Leader & HR)
+                                  └─ /admin/*    (HR Admin)
+
+
+ProtectedLayout
+: Enforces authentication. If unauthenticated, it preserves navigation state and redirects to /login. Once authenticated, it renders a sticky two-column dashboard shell (
+
+Sidebar
+ on the left, sticky 
+
+Topbar
+ on top, and dynamic page <Outlet /> in the content viewport).
+
+
+RoleGate
+: Guard component ensuring that sensitive views (such as HR administrative settings or manager nomination screens) can only be accessed by permitted roles (EMPLOYEE, LEADER, HR_ADMIN). Unauthorized requests automatically redirect to /me.
+
+
+RootRedirect
+: Automatically routes users hitting / directly to their natural landing page:
+HR_ADMIN ➔ /admin
+LEADER ➔ /leader
+EMPLOYEE ➔ /me
+3. State Management & Core Context Services
+A. Authentication Context (
+
+AuthContext.tsx
+)
+Credentials Validation: Validates user login via VCreaTek ID (e.g., VCT1001) or official email against local state.
+Session Persistence: Stores session tokens and serialized user models in browser localStorage.
+Instant Persona Switcher (switchUser): Allows administrators and testers to switch between any employee, manager, or HR account with one click to preview the UI from different permission perspectives without logging out.
+B. Data Context (
+
+DataContext.tsx
+)
+The platform's relational client-side database management engine, managing 13 relational datasets:
+
+
+
+checkEligibility
+: Real-time policy engine checking employee eligibility:
+Verifies minimum tenure (e.g., 3 months for FTE, 6 months for Contractors). Calculates exact date of future eligibility.
+Automatically disqualifies employees actively serving notice periods.
+Enforces leadership exclusion (leaders can award others but cannot receive recognition).
+
+
+giveAward
+:
+Validates minimum 20-character justification.
+Deducts allocation units from the manager's annual inventory.
+If the tier requires approval (e.g., Diamond or Gold), it transitions to PENDING_APPROVAL and queues an email notification to the manager’s supervisor or HR.
+If the tier is auto-issued (e.g., Beacon, Bronze, Silver), it credits recipient points, generates an e-certificate, logs audit trails, and dispatches email notifications.
+
+
+decideAward
+: Approves or rejects nominations. On rejection, leader quota units are restored automatically.
+
+
+revokeAward
+: Reverses issued awards, deducts credited points from recipient ledger, and invalidates certificates.
+
+
+requestRedemption
+: Deducts points immediately from the employee ledger into a holding state to prevent duplicate redemption.
+Excel Sync: 
+
+exportToExcel
+ exports all 13 tables into a 13-sheet workbook; 
+
+importFromExcel
+ reads and hydrates all records live in the browser.
+4. Design System & Theming Tokens
+All styling is defined in 
+
+tokens.css
+:
+
+Brand Colors: Primary Deep Navy (--primary: #2e3192), Vibrant Coral Accent (--accent: #e46a25), Crisp White Surface (--surface: #ffffff), and Soft Grey Background (--bg: #f8fafc).
+Award Tier Color Scheme:
+Beacon: Soft Lime (#8fbc5a)
+Bronze: Metallic Bronze (#cd7f32)
+Silver: Cool Platinum (#8e9aa8)
+Gold: Warm Gold (#d4a017)
+Diamond: Sky Cyan (#5fb8d8)
+Visual Effects: Backdrop blur (backdrop-filter: blur(20px)) on top navigation and sidebar, 8px/12px/20px border radii, multi-stop linear gradients on action buttons, and elevation drop-shadows.
+5. Reusable UI Components
+
+
+Sidebar
+: Displays the company logo, role-filtered navigation items, and bottom user profile card.
+
+
+Topbar
+: Dynamically renders page title and descriptive subtitle based on route URL, user avatar, quick logout, and the modal persona switcher.
+
+
+DataTable
+: Reusable, type-safe data grid with customizable cell renderers, numeric alignments, hover rows, and empty-state fallbacks.
+
+
+KpiCard
+: Metric cards with top accent borders (primary, accent, success, warn, danger), value displays, labels, and iconography.
+
+
+Badge
+: Pill tags mapping lifecycle states (ISSUED, PENDING_APPROVAL, REQUESTED, FULFILLED, REJECTED, REVOKED) to contextual colors.
+
+
+CertificateModal
+: Formats an official certificate of appreciation containing recipient details, award tier, reason, issuing manager, serial number (RR-YYYY-XXXX), and a direct print/PDF export trigger.
+
+
+PureBarChart
+: Zero-dependency SVG bar chart rendering monthly recognition counts (Jan–Dec) with bar tooltips and current-month highlighting.
+
+
+Modal
+: Accessible modal dialog with body scroll locking, ESC key detection, and click-outside dismissal.
+6. Detailed Walkthrough of Frontend Modules
+A. Entry & Authentication
+
+
+Login.tsx
+:
+Split-screen design featuring VCreaTek brand mission and benefits.
+Standard email/VCreaTek ID + password submission.
+Demo quick-fill persona buttons categorized by HR Administrators, Managers, and Employees.
+Quick Excel upload input to seed or reset platform data directly from the login screen.
+B. Employee Self-Service Experience
+
+
+MyRewards.tsx
+ (/me):
+High-level KPIs: Available points balance (with Rupee equivalent), lifetime points earned, lifetime points redeemed, and total awards received.
+Live eligibility banner (informs if employee is eligible or when their eligibility begins based on joining date).
+Visual breakdown of awards received across Beacon, Bronze, Silver, Gold, and Diamond tiers.
+Interactive table of received recognitions with instant certificate preview and download modal.
+Public Appreciation Wall displaying recent company-wide recognitions to encourage peer morale.
+
+
+MyPoints.tsx
+ (/me/points):
+Financial-grade points ledger.
+Chronological table of all point transactions (AWARD, REDEEM, ADJUSTMENT, REVERSAL), points delta, descriptions, dates, and actors.
+
+
+AwardHistory.tsx
+ (/me/awards):
+Filterable ledger of all awards received with details on awarding manager, tier, date, points, and certificate access.
+
+
+RedeemPoints.tsx
+ (/me/redeem):
+Point redemption form with step-controlled input (increments of 100 points, minimum 500 points).
+Real-time conversion display showing INR cash voucher value based on active exchange rate.
+Balance reservation to prevent double-spending.
+4-step workflow explainer outlining voucher procurement and delivery guarantees.
+
+
+RedemptionHistory.tsx
+ (/me/redemptions):
+Lifecycle tracking for voucher requests (REQUESTED ➔ UNDER_REVIEW ➔ APPROVED ➔ FULFILLED).
+Displays voucher provider (Amazon, Flipkart, etc.), voucher card reference numbers, dates, and HR fulfillment remarks.
+C. Manager & Leadership Workspace
+
+
+LeaderDashboard.tsx
+ (/leader):
+Annual quota utilization tracker showing allocated, used, and remaining units per tier.
+Leader KPIs: Month-to-date awards, year-to-date awards, unique individuals recognized, and pending nominations.
+
+
+PureBarChart
+ showing monthly distribution pattern across the calendar year.
+Leaderboard showing the manager's most frequently recognized team members.
+
+
+AwardEmployees.tsx
+ (/leader/award):
+Step 1 - Candidate Selection: Searchable employee list with live policy eligibility validation. Badges indicate whether each employee is eligible or in notice period. Supports multi-candidate selection.
+Step 2 - Tier Selection: Radio cards showing Beacon, Bronze, Silver, Gold, and Diamond with point values, INR value, and remaining manager quota units.
+Step 3 - Justification: Textarea enforcing a minimum 20-character rationale.
+Dynamic submission button indicating whether the award will be issued immediately with an e-certificate or routed for supervisor approval.
+
+
+AwardsGiven.tsx
+ (/leader/awards):
+Complete ledger of awards issued by the logged-in manager, with recipient names, approval states, timestamps, and reason tooltips.
+
+
+PendingApprovals.tsx
+ (/approvals):
+Decision console for higher-tier awards (Gold, Diamond).
+Groups nominations by batch with award details and manager justification.
+One-click approve or reject with mandatory rejection remarks. Rejection immediately restores the issuing manager's quota units.
+D. HR Executive Administration Portal
+
+
+HrDashboard.tsx
+ (/admin):
+Organization-wide health overview: Total budget allocated vs. actual spend, overall quota utilization percentage, active vs. eligible headcount, and pending redemption liabilities.
+Company-wide monthly recognition cadence bar chart.
+Breakdown tables by award tier and manager participation tracking (highlighting managers with zero awards given).
+
+
+InventoryAllocation.tsx
+ (/admin/allocate):
+Matrix showing every manager's allocated, used, and remaining quota units across all 5 tiers.
+Quota adjustment tool allowing HR to allocate additional units or revoke unused inventory with audit reason tracking.
+
+
+AdminRedemptions.tsx
+ (/admin/redemptions):
+Queue of employee gift voucher requests with status filters.
+Fulfillment modal to record retail brand name (e.g. Amazon), voucher reference code, amount, and fulfillment comments.
+Dispatches automated notification to the employee upon completion.
+
+
+Reminders.tsx
+ (/admin/reminders):
+Proactive reminder engine identifying inactive managers with expiring quotas or zero awards given.
+Sends templated notifications into the email dispatch queue.
+
+
+ConfigRules.tsx
+ (/admin/config):
+Award Tier Editor: Modify point values, INR values, default manager quotas, certificate generation flags, and approval requirements. Supports creating new tiers.
+Tenure Policy Editor: Configure minimum tenure requirements and notice-period rules per employment type (FTE, Contractor, Intern).
+System Settings: Set the Rupee-to-point conversion rate, minimum redemption threshold, and HR contact mailbox.
+
+
+AdminAwardHistory.tsx
+ (/admin/history):
+Company-wide audit table with multi-filter parameters (date period, tier, status, query).
+Administrative award revocation tool: roll back points, invalidate certificates, and update the audit log with a single action.
+
+
+AuditAndEmails.tsx
+ (/admin/audit):
+Tabbed view of all system audit logs (user, action, target table, previous state, new state, timestamp).
+Outbox viewer displaying sent and queued system emails with recipient, subject, preview body, and delivery timestamp.
+
+
+DataManagement.tsx
+ (/admin/data):
+Browser-side Excel data pipeline.
+Exports the entire relational state across 13 sheets into an .xlsx file.
+Accepts modified .xlsx files to validate and hydrate local application storage, with a one-click factory reset option.
+12:52 PM

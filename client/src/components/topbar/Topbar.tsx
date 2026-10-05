@@ -88,7 +88,7 @@ export const Topbar: React.FC = () => {
           </div>
 
           <span className="demo-pill">
-            <Sparkles size={13} /> DEMO ACTIVE
+            <Sparkles size={13} /> USER ACTIVE
           </span>
 
           <button
